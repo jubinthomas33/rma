@@ -1,0 +1,19 @@
+content_assist_completion_replacement_background=128,128,128
+content_assist_completion_replacement_foreground=128,128,128
+content_assist_parameters_background=128,128,128
+content_assist_parameters_foreground=128,128,128
+eclipse.preferences.version=1
+java_bracket=255,255,255
+matchingBracketsColor=128,128,128
+org.eclipse.jdt.ui.formatterprofiles.version=23
+org.eclipse.jdt.ui.text.custom_templates=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?><templates/>
+org.eclipse.jdt.ui.typefilter.disabled=java.awt.*;java.rmi.*;org.graalvm.*
+org.eclipse.jdt.ui.typefilter.enabled=com.sun.*;io.micrometer.shaded.*;jdk.*;sun.*;java.awt.List
+org.eclipse.jdt.ui.visibility.order=B,V,R,D,
+outlinesortoption=T,SF,SI,SM,F,I,C,M,
+sourceHoverBackgroundColor=47,47,47
+spelling_locale_initialized=true
+spelling_user_dictionary_encoding=
+typefilter_migrated_2=true
+useAnnotationsPrefPage=true
+useQuickDiffPrefPage=true

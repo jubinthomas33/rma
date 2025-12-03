@@ -1,0 +1,9 @@
+AbstractTextEditor.Color.SelectionBackground=0,120,215
+comment_stylePreferences=NONE
+comment_text=false
+currentLineColor=0,0,0
+eclipse.preferences.version=1
+fullcoverage_color=6,74,6
+lineNumberColor=192,192,192
+nocoverage_color=98,5,5
+partialcoverage_color=98,98,0
