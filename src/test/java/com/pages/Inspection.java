@@ -1,5 +1,7 @@
 package com.pages;
 
+import java.time.Duration;
+
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.StaleElementReferenceException;
@@ -8,6 +10,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.testng.Assert;
+
 import com.base.BaseClass;
 import com.utility.ConfigReader;
 import com.utility.Elements;
@@ -91,23 +95,25 @@ public class Inspection {
 	WebElement manualPopUp;
 	@FindBy(xpath = "//div[@class='esl-modal']//following::button[text()='Enter Manually']")
 	WebElement enterManually;
-	@FindBy(xpath = "//ul[contains(@id,'modelCode')]/li[1]")
-	WebElement modelOne;
+
 	@FindBy(xpath = "(//table//tr)[2]/td[7]//ul/li[1]")
 	WebElement liability1;
-	@FindBy(xpath = "(//table//tr)[2]/td[2]//ul[contains(@id,'modelCode')]")
-	WebElement model;
 
 	@FindBy(xpath = "(//table//tr)[2]/td[2]//input/following::div[@role='presentation']")
 	WebElement modelDropDown;
 
+	@FindBy(xpath = "//li[@data-option-index='0']")
+	WebElement modeltest1;
+
 	public void fillFirstRow() throws InterruptedException {
+
 		BaseClass.getWait().until(ExpectedConditions.urlContains(ConfigReader.getProperty("InspectionUrlContains")));
 		log.info("Inspection Url: " + driver.getCurrentUrl());
 		log.info("Filling first row...");
 
 		String macId = e.generateMacId(14);
 		log.info("Generated Mac ID: " + macId);
+
 		e.sendTextToCellByHeading("MAC ID", 2, macId);
 		log.info("MAC ID added...");
 
@@ -115,34 +121,21 @@ public class Inspection {
 		e.click(enterManually);
 		log.info("Manually Entering Values...");
 
+		// ===== MODEL CODE =====
+
 		e.clickInputAreaByHeading("MODEL CODE", 2);
-		log.info("Waiting for model  drop down...");
-		// e.getVisible(model);
-		for (int i = 0; i < 3; i++) {
-			try {
-				BaseClass.getWait().until(ExpectedConditions.elementToBeClickable(modelOne));
-				e.click(modelOne);
-				return;
-			} catch (StaleElementReferenceException ex) {
-				log.info("Retrying due to stale element...");
-			}
-		}
+		WebElement modelInput = e.returnInputAreaByHeading("MODEL CODE", 2);
 
-		String liabilityElementString = e.returnInspectionTableElementInput("LIABILITY", "2");
+		log.info("Waiting for model drop down...");
+		Thread.sleep(2000);
 
-		WebElement liabilityElement = driver.findElement(By.xpath(liabilityElementString));
+		WebElement modelOptionOne = driver.findElement(By.xpath("//li[@data-option-index='0']"));
 
-		log.info("Element returned: " + liabilityElement);
-		BaseClass.getWait().until(ExpectedConditions.attributeContains(liabilityElement, "aria-expanded", "true"));
-		log.info("aria-expanded =true; moving forward...");
-		log.info("Choosing liability as : " + liability0.getText());
-		e.click(liabilityElement);
+		e.click(modelOptionOne);
+		log.info("Model selected successfully");
 
-		String defectSymptomString = e.returnInspectionTableElementInput("DEFECT SYMPTOM", "2");
-		WebElement defectSymptomWeb = driver.findElement(By.xpath(defectSymptomString));
-
-		BaseClass.getWait().until(ExpectedConditions.attributeContains(defectSymptomWeb, "aria-expanded", "true"));
-
+		log.info("Selected Model Code: " + modelInput.getAttribute("value"));
+		Thread.sleep(5000);
 	}
 
 }

@@ -8,6 +8,7 @@ import org.openqa.selenium.support.PageFactory;
 
 import com.utility.ConfigReader;
 import com.utility.Elements;
+import com.utility.HttpRequest;
 import com.utility.LoggerHelper;
 import com.webdrivermanager.DriverManager;
 
@@ -32,6 +33,8 @@ public class LoginPage {
 
 	
 	public void goToUrl() {
+		int statusCode=HttpRequest.getStatusCode(ConfigReader.getProperty("url"));
+		log.info("Status code: "+ statusCode);
 		e.goToUrl(ConfigReader.getProperty("url"));
 	}
 	public void sendCredentials() {

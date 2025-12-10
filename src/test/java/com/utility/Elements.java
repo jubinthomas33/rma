@@ -100,7 +100,7 @@ public class Elements {
 		// 2️⃣ Build complete cell XPath
 		String cellXPath = "(//table//tr)[" + rowNum + "]/td[" + colIndexXPath + "]";
 
-		System.out.println("Final cell XPath: " + cellXPath);
+		log.info("Final cell XPath: " + cellXPath);
 
 		// 3️⃣ Find the cell
 		WebElement cell = driver.findElement(By.xpath(cellXPath));
@@ -108,13 +108,13 @@ public class Elements {
 		// ------------------------------
 		// 4️⃣ Try INPUT first
 		// ------------------------------
-		try {
-			WebElement input = cell.findElement(By.xpath(".//input[not(@type='hidden')]"));
-			input.clear();
-			input.sendKeys(text);
-			return;
-		} catch (Exception ignored) {
-		}
+//		try {
+//			WebElement input = cell.findElement(By.xpath(".//input[not(@type='hidden')]"));
+//			input.clear();
+//			input.sendKeys(text);
+//			return;
+//		} catch (Exception ignored) {
+//		}
 
 		// ------------------------------
 		// 5️⃣ Try TEXTAREA (ignore aria-hidden="true")
@@ -130,22 +130,22 @@ public class Elements {
 		// ------------------------------
 		// 6️⃣ Try contenteditable DIV
 		// ------------------------------
-		try {
-			WebElement editableDiv = cell.findElement(By.xpath(".//*[@contenteditable='true']"));
-
-			// clearing without JS
-			editableDiv.sendKeys(Keys.CONTROL + "a");
-			editableDiv.sendKeys(Keys.DELETE);
-
-			editableDiv.sendKeys(text);
-			return;
-		} catch (Exception ignored) {
-		}
+//		try {
+//			WebElement editableDiv = cell.findElement(By.xpath(".//*[@contenteditable='true']"));
+//
+//			// clearing without JS
+//			editableDiv.sendKeys(Keys.CONTROL + "a");
+//			editableDiv.sendKeys(Keys.DELETE);
+//
+//			editableDiv.sendKeys(text);
+//			return;
+//		} catch (Exception ignored) {
+//		}
 
 		// ------------------------------
 		// 7️⃣ Nothing found → throw clear error
 		// ------------------------------
-		throw new RuntimeException(" No editable element (input/textarea/div) found inside cell: " + cellXPath
+		throw new RuntimeException(" No editable element (textarea) found inside cell: " + cellXPath
 
 		);
 
@@ -153,29 +153,52 @@ public class Elements {
 
 	public void clickInputAreaByHeading(String heading, int rowNum) {
 
-	    // 1. Get the column index of the heading
-	    String colIndexXPath = "//table//th[normalize-space()='" + heading + "']";
-	    WebElement header = driver.findElement(By.xpath(colIndexXPath));
+		// 1. Get the column index of the heading
+		String colIndexXPath = "//table//th[normalize-space()='" + heading + "']";
+		WebElement header = driver.findElement(By.xpath(colIndexXPath));
 
-	    int colIndex = header.findElements(By.xpath("preceding-sibling::th")).size() + 1;
+		int colIndex = header.findElements(By.xpath("preceding-sibling::th")).size() + 1;
 
-	    System.out.println("Column index for '" + heading + "' is: " + colIndex);
+		log.info("Column index for '" + heading + "' is: " + colIndex);
 
-	    // 2. Build correct cell XPath
-	    String cellXPath = "(//table//tr)[" + rowNum + "]/td[" + colIndex + "]";
+		// 2. Build correct cell XPath
+		String cellXPath = "(//table//tr)[" + rowNum + "]/td[" + colIndex + "]";
 
-	    System.out.println("Final cell XPath: " + cellXPath);
+		log.info("Final cell XPath: " + cellXPath);
 
-	    // 3. Find cell
-	    WebElement cell = driver.findElement(By.xpath(cellXPath));
+		// 3. Find cell
+		WebElement input = driver.findElement(By.xpath(cellXPath + "//input"));
 
-	    // 4. Find input inside that cell
-	    WebElement input = cell.findElement(By.xpath(".//input[not(@aria-hidden='true')]"));
+		// 4. Find input inside that cell
+		// WebElement input = cell.findElement(By.xpath(".//input"));
 
-	    // 5. Click
-	    input.click();
+		// 5. Click
+		input.click();
 	}
 
+	public WebElement returnInputAreaByHeading(String heading, int rowNum) {
+
+		// 1. Get the column index of the heading
+		String colIndexXPath = "//table//th[normalize-space()='" + heading + "']";
+		WebElement header = driver.findElement(By.xpath(colIndexXPath));
+
+		int colIndex = header.findElements(By.xpath("preceding-sibling::th")).size() + 1;
+		log.info("Column index for '" + heading + "' is: " + colIndex);
+
+		// 2. Build correct cell XPath
+		String cellXPath = "(//table//tr)[" + rowNum + "]/td[" + colIndex + "]";
+
+		log.info("Final cell XPath: " + cellXPath);
+
+		// 3. Find cell
+		WebElement input = driver.findElement(By.xpath(cellXPath + "//input"));
+
+		// 4. Find input inside that cell
+		// WebElement input = cell.findElement(By.xpath(".//input"));
+
+		// 5. Click
+		return input;
+	}
 
 	public String returnInspectionTableElementInput(String heading, String rowNum) {
 		// 1️⃣ Find column index using count()
@@ -187,9 +210,9 @@ public class Elements {
 		System.out.println("Final cell XPath: " + cellXPath);
 
 		// 3️⃣ Find the cell
-		//WebElement cell = driver.findElement(By.xpath(cellXPath));
-	//	WebElement input = cell.findElement(By.xpath(".//input"));
-		String input="(//table//tr)[\" + rowNum + \"]/td[\" + colIndexXPath + \"]//input";
+		// WebElement cell = driver.findElement(By.xpath(cellXPath));
+		// WebElement input = cell.findElement(By.xpath(".//input"));
+		String input = "(//table//tr)[\" + rowNum + \"]/td[\" + colIndexXPath + \"]//input";
 		return input;
 	}
 
@@ -218,7 +241,7 @@ public class Elements {
 		return getVisible(element).getText();
 	}
 
-	public void scrollToView(WebElement element) {
+	public void javaScrollToView(WebElement element) {
 		js = (JavascriptExecutor) driver;
 		js.executeScript("arguments[0].scrollIntoView(true);", element);
 
@@ -433,7 +456,6 @@ public class Elements {
 		// Send the date (field already cleared)
 		element.sendKeys(finalDate);
 		element.sendKeys(Keys.ENTER);
-	
 
 		log.debug("Date successfully sent: " + finalDate);
 	}

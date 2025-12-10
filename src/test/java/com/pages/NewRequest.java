@@ -96,7 +96,7 @@ public class NewRequest {
 
 		// Enter customer search text
 		e.sendText(customerField, "rewe");
-		//log.debug("Search text 'rewe' entered");
+		// log.debug("Search text 'rewe' entered");
 
 		// Wait for customer option to appear and be clickable
 		try {
@@ -108,7 +108,8 @@ public class NewRequest {
 
 		// Click customer option
 		e.click(reweCustomer);
-		log.info("Customer 'rewe' selected");
+		String customer = e.getText(customerField);
+		log.info("Customer" + customer + "selected");
 
 		// Wait before clicking store field
 		try {
@@ -164,7 +165,7 @@ public class NewRequest {
 	}
 
 	public void enterTrackingNumber() {
-		e.scrollToView(trackingNumber);
+		e.javaScrollToView(trackingNumber);
 		String trackNumber = e.faker.number().digits(10);
 		e.click(trackingNumber);
 		e.sendText(trackingNumber, trackNumber);
@@ -189,7 +190,7 @@ public class NewRequest {
 		}
 
 		// Scroll to view and click
-		e.scrollToView(firstDisplayInput);
+		e.javaScrollToView(firstDisplayInput);
 		e.click(firstDisplayInput);
 		log.debug("Display input field clicked");
 
@@ -223,7 +224,7 @@ public class NewRequest {
 	public void goToTicketList() throws InterruptedException {
 		e.getVisible(sucessContainer);
 		e.click(ticketList);
-		
+
 	}
 
 }

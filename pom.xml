@@ -114,7 +114,7 @@
 		<dependency>
 			<groupId>io.cucumber</groupId>
 			<artifactId>messages</artifactId>
-			<version>31.0.0</version>
+			<version>23.0.0</version>
 		</dependency>
 
 		<dependency>
@@ -157,7 +157,7 @@
 					<version>3.13.0</version>
 				</plugin>
 				<plugin>
-					<artifactId>maven-surefire-plugin</artifactId>
+					<artifactId>maven-surefire-plugin</artifactId> 
 					<version>3.3.0</version>
 				</plugin>
 				<plugin>

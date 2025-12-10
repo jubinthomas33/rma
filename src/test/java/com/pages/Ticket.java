@@ -5,11 +5,16 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import com.base.BaseClass;
 import com.utility.Elements;
 import com.utility.LoggerHelper;
 import com.webdrivermanager.DriverManager;
@@ -24,7 +29,6 @@ public class Ticket {
 		this.driver = DriverManager.getDriver();
 		e = new Elements();
 		PageFactory.initElements(driver, this);
-
 	}
 
 	@FindBy(xpath = "//div[@class='d-flex align-items-center']/div[@id='e2e_design_textfield']//input[contains(@placeholder,'RMA No')]")
@@ -61,59 +65,57 @@ public class Ticket {
 	WebElement arrivalContainer;
 	@FindBy(xpath = "//p[text()='Inspection']/following::button")
 	WebElement startScan;
-	@FindBy(xpath = "//tbody/tr")
+	@FindBy(xpath = "//tbody//tr")
 	List<WebElement> rowEntire;
-	@FindBy(xpath = "(//tr)[2]")
+	@FindBy(xpath = "//table//tr")
+	WebElement entireRow;;
+	@FindBy(xpath = "(//table//tr)[2]")
 	WebElement rowOne;
-
-	@FindBy(xpath = "(//tr)[2]")
-	WebElement rowOne1;
 	@FindBy(xpath = "//div[@class='nav-wrapper ']//div[contains(@class,'button-container')]//*[contains(.,'Inspection')]")
 	WebElement sideInspectionMenu;
 
 	public void searchRefNumber() {
 
 		String refNum = NewRequest.refNo;
+
+		// ✅ CORRECT XPATH (string properly concatenated)
+		String xpathWithRefNo = "//table//tr[td[contains(text(),'" + refNum + "')]]";
+
 		log.info("Searching for reference number: " + refNum);
 
-		e.sendText(searchRefNo, refNum);
+		for (int attempt = 1; attempt <= 3; attempt++) {
 
-		if (rowEntire.size() > 2) {
-			e.click(rowOne);
-			log.info("There are more than 1 ticket");
-			log.warn("Search function failed");
-			log.info("Finding alternative method to proceed");
-			log.info("Total rows:  " + rowEntire.size());
-		} else if (rowEntire.size() == 2) {
-			e.click(rowOne1);
-			log.info("Clicking the ticket...");
-		} else {
-			log.info("Couldn't click the ticket...");
+			try {
+				e.clearAll(searchRefNo);
+				e.sendText(searchRefNo, refNum);
+				searchRefNo.sendKeys(Keys.ENTER);
+
+				// Wait for table to load
+				BaseClass.getWait().until(ExpectedConditions.presenceOfElementLocated(By.xpath("//table//tr")));
+
+				int rowCount = rowEntire.size();
+				log.info("Attempt " + attempt + " - Row count: " + rowCount);
+
+				// If at least 1 data row is present
+				if (rowCount >= 1) {
+
+					WebElement singleTicket = BaseClass.getWait()
+							.until(ExpectedConditions.elementToBeClickable(By.xpath(xpathWithRefNo)));
+
+					log.info("Ticket found. Clicking the row.");
+					singleTicket.click();
+					return;
+				}
+
+				log.warn("No valid rows found. Retrying...");
+
+			} catch (Exception ex) {
+				log.warn("Attempt " + attempt + " failed. " + ex.getMessage());
+			}
 		}
-	}
 
-	/*
-	 * public void validateSingleTicket() { // Wait for table to be visible first
-	 * e.getVisible(Tickets);
-	 * 
-	 * // Wait for search results to stabilize
-	 * BaseClass.getWait().until(ExpectedConditions.numberOfElementsToBe(By.xpath(
-	 * "//tr"), 2));
-	 * 
-	 * List<WebElement> rows = driver.findElements(By.xpath("//tr"));
-	 * log.info("Total tickets found: " + (rows.size() - 1));
-	 * 
-	 * if (rows.size() != 2) {
-	 * log.error("Expected 2 rows (1 header + 1 data), but found: " + rows.size());
-	 * throw new AssertionError("Expected 2 rows but found " + rows.size() +
-	 * " rows"); }
-	 * 
-	 * log.info("Single ticket validation successful"); }
-	 * 
-	 * public void navigateToTicket() { e.click(theTicket);
-	 * 
-	 * }
-	 */
+		log.error("Search failed after 3 attempts for reference number: " + refNum);
+	}
 
 	public void enterArrivalDate() {
 
@@ -152,16 +154,22 @@ public class Ticket {
 		e.click(confirmArrival);
 		log.info("Confirmig Arrival");
 		log.info("Starting Inspection");
-		if (inspectionContainer.isDisplayed()) {
-			e.click(goToInspectionButton);
-			log.info("Using the pop up inspection navigation");
-		} else {
-			e.click(sideInspectionMenu);
-			log.info("Using side inspection menu");
-		}
+		try {
+			if (inspectionContainer.isDisplayed()) {
+				e.click(goToInspectionButton);
+				log.info("Using the pop up inspection navigation");
+			} else {
 
-		e.click(startScan);
-		log.info("Clicked Start Scan button");
+				e.click(sideInspectionMenu);
+				log.info("Using side inspection menu");
+			}
+
+		} catch (Exception ex) {
+			log.info("Inspection pop-up missing..."); }
+
+			e.click(startScan);
+			log.info("Clicked Start Scan button");
+		
+
 	}
-
 }
