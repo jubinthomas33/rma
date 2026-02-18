@@ -10,39 +10,37 @@ import io.cucumber.java.en.*;
 
 public class LoginPageStep {
 	WebDriver driver;
-	LoginPage lp;
-	Elements e;
+	LoginPage loginpage;
+	Elements elements;
 
 	public LoginPageStep() {
-		// Driver will be initialized by @Before hook in Hooks class
-		// Initialize page objects lazily when needed
 	}
 
 	private void initializeObjects() {
 		if (this.driver == null) {
 			this.driver = DriverManager.getDriver();
 		}
-		if (this.lp == null) {
-			this.lp = new LoginPage();
+		if (this.loginpage == null) {
+			this.loginpage = new LoginPage();
 		}
-		if (this.e == null) {
-			this.e = new Elements();
+		if (this.elements == null) {
+			this.elements = new Elements();
 		}
 	}
 
 	@Given("user is on the login page")
 	public void user_is_on_the_login_page() {
 		initializeObjects();
-		if (lp != null) {
-			lp.goToUrl();
+		if (loginpage != null) {
+			loginpage.goToUrl();
 		}
 	}
 
 	@Then("user enters valid credentials and logs in")
 	public void user_enters_valid_credentials_and_logs_in() {
 		initializeObjects();
-		if (lp != null) {
-			lp.sendCredentials();
+		if (loginpage != null) {
+			loginpage.sendCredentials();
 		}
 	}
 

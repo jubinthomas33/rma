@@ -5,8 +5,7 @@ import org.openqa.selenium.WebDriver;
 import com.pages.Configuration;
 import com.webdrivermanager.DriverManager;
 
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
+import io.cucumber.java.en.*;
 
 public class ConfigurationStep {
 	WebDriver driver;
@@ -17,7 +16,7 @@ public class ConfigurationStep {
 		this.c = new Configuration();
 
 	}
-	@Given("navigates to customer menu for configurational changes")
+	@Then("navigates to customer menu for configurational changes")
 	public void navigates_to_customer_menu_for_configurational_changes() {
 	    c.selectCustomerMenu();
 	}

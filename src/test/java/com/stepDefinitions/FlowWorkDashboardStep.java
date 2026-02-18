@@ -5,8 +5,7 @@ import org.openqa.selenium.WebDriver;
 import com.pages.FlowWorkDashboard;
 import com.webdrivermanager.DriverManager;
 
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
+import io.cucumber.java.en.*;
 
 public class FlowWorkDashboardStep {
 	WebDriver driver;
@@ -17,6 +16,7 @@ public class FlowWorkDashboardStep {
 		this.rma = new FlowWorkDashboard();
 
 	}
+	
 	@Then("user validates the dashboard url")
 	public void user_validates_the_dashboard_url() {
 	   rma.validateFlowWorkDashboard();

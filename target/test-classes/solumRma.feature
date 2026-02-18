@@ -2,7 +2,7 @@ Feature: RMA Request positive flow
 
 
 @browser=chrome
-Scenario: User Creates a ticket sucessfully 
+Scenario: User Creates a ticket sucessfullyste 
 Given user is on the login page 
 Then user enters valid credentials and logs in 
 Then user validates the dashboard url
@@ -17,4 +17,4 @@ Then now navigate to the new Request
 And Fill in the required fields
 And Find the the new ticket 
 Then navigate to Inspection phase 
-And fill in the corresponding tags and respective defects
+And fill in the corresponding tags and respective defect

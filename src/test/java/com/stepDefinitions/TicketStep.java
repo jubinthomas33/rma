@@ -5,8 +5,7 @@ import org.openqa.selenium.WebDriver;
 import com.pages.Ticket;
 import com.webdrivermanager.DriverManager;
 
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
+import io.cucumber.java.en.*;
 
 public class TicketStep {
 	WebDriver driver;
@@ -18,7 +17,7 @@ public class TicketStep {
 
 	}
 
-	@Given("Find the the new ticket")
+	@Then("Find the the new ticket")
 	public void find_the_the_new_ticket() {
 		ticket.searchRefNumber();
 		

@@ -4,8 +4,7 @@ import org.openqa.selenium.WebDriver;
 import com.pages.NewRequest;
 import com.webdrivermanager.DriverManager;
 
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
+import io.cucumber.java.en.*;
 
 public class NewRequestStep {
 	WebDriver driver;

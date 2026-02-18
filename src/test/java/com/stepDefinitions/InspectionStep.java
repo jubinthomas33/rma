@@ -5,7 +5,7 @@ import org.openqa.selenium.WebDriver;
 import com.pages.Inspection;
 import com.webdrivermanager.DriverManager;
 
-import io.cucumber.java.en.Given;
+import io.cucumber.java.en.*;
 
 public class InspectionStep {
 	WebDriver driver;
@@ -17,8 +17,8 @@ public class InspectionStep {
 
 	}
 	
-	@Given("fill in the corresponding tags and respective defects")
-	public void fill_in_the_corresponding_tags_and_respective_defects() throws InterruptedException {
+	@Then("fill in the corresponding tags and respective defect")
+	public void fill_in_the_corresponding_tags_and_respective_defect() throws InterruptedException {
 	  
 	   
 	    inspection.fillFirstRow();

@@ -13,10 +13,8 @@ public class DriverManager {
 
 	private static final Logger log = LoggerHelper.getLogger(DriverManager.class);
 
-	// private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
-
-	// setting the driver
-	// In case of any unwanted browser , Chrome will be running automatically
+	
+	
 
 	private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
 
